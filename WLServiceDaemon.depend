@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1442999519 source:c:\c\wlservicedaemon\main.c
+	<stdio.h>
+	<stdlib.h>
+	"WService.c"
+
+1443000859 c:\c\wlservicedaemon\wservice.c
+	<Windows.h>
+	<stdio.h>
+	"LogWriter.c"
+
+1443001030 c:\c\wlservicedaemon\logwriter.c
+
