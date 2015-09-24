@@ -111,7 +111,7 @@ int write(){
     WriteToLog("服务开始运行");
     while(WaitForSingleObject(g_ServiceStopEvent, 0) != WAIT_OBJECT_0){
         WriteToLog("a");
-        Sleep(1000);
+        Sleep(60000);
     }
     WriteToLog("服务停止运行");
     return 0;

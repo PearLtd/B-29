@@ -9,6 +9,7 @@
 #include "LogWriter.h"
 
 int IsWrite=1;///是否写log
+time_t t;
 
 
 int WriteToLog(char* str)
@@ -18,7 +19,9 @@ int WriteToLog(char* str)
     FILE* log;
     log = fopen(PATH, "a+");
     if (log == NULL) return -1;
-    fprintf(log, "%s\n", str);
+    
+    time(&t);
+    fprintf(log,"%s   current time is:%s\n", str, asctime(localtime(&t)));  //转换为本地时间输出
     fclose(log);
     return 0;
 }

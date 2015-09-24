@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="LDaemon.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="LDaemon.h" />
 		<Unit filename="LogWriter.c">
 			<Option compilerVar="CC" />
 		</Unit>

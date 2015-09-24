@@ -10,11 +10,12 @@
 #define LogWriter_h
 
 #include <stdio.h>
+#include<time.h>
 
 #ifdef _WIN32
 #define PATH "c:\\pear.txt"
 #else
-#define PATH "//home//abo//Work//Projects//LinuxDaemon//Test//log.txt"
+#define PATH "pear.txt"
 #endif
 
 int WriteToLog(char* str);

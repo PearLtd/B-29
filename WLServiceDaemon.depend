@@ -2,8 +2,9 @@
 1443075378 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.c
 	"LogWriter.h"
 
-1443075489 c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.h
+1443086553 c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.h
 	<stdio.h>
+	<time.h>
 
 1443065479 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\main.c
 	<stdio.h>

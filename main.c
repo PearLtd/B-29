@@ -12,7 +12,7 @@
 #ifdef _WIN32
 #include "WService.h"
 #else
-//#include "LDaemon.h"
+#include "LDaemon.h"
 #endif
 
 
