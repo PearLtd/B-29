@@ -1,17 +1,19 @@
-#include <Windows.h>
-#include <stdio.h>
-#include "LogWriter.c"
+//
+//  WService.c
+//  WLServiceDaemon
+//
+//  Created by å¼ ä¹¦ç¿ on 15/9/24.
+//  Copyright Â© 2015å¹´ å¼ ä¹¦ç¿. All rights reserved.
+//
 
-#define SERVICE_NAME "MemoryStatus"
+#ifdef _WIN32
 
-SERVICE_STATUS ServiceStatus;  // ·şÎñ×´Ì¬
-SERVICE_STATUS_HANDLE hStatus; // ·şÎñ×´Ì¬¾ä±ú
+#include "WService.h"
+
+SERVICE_STATUS ServiceStatus;  // æœåŠ¡çŠ¶æ€
+SERVICE_STATUS_HANDLE hStatus; // æœåŠ¡çŠ¶æ€å¥æŸ„
 
 HANDLE g_ServiceStopEvent = INVALID_HANDLE_VALUE;
-
-void  ServiceMain(int argc, char** argv);
-void ServiceCtrlHandler(int CtrlCode);
-int write();
 
 void WStart()
 {
@@ -20,58 +22,58 @@ void WStart()
     ServiceTable[0].lpServiceProc = (LPSERVICE_MAIN_FUNCTION)ServiceMain;
     ServiceTable[1].lpServiceName = NULL;
     ServiceTable[1].lpServiceProc = NULL;
-    // Æô¶¯·şÎñµÄ¿ØÖÆ·ÖÅÉ»úÏß³Ì
+    //å¯åŠ¨æœåŠ¡çš„æ§åˆ¶åˆ†æ´¾æœºçº¿ç¨‹
     StartServiceCtrlDispatcher(ServiceTable);
     return;
 }
 
 void ServiceMain(int argc, char** argv){
-   hStatus= RegisterServiceCtrlHandler(SERVICE_NAME, ServiceCtrlHandler);
+    hStatus= RegisterServiceCtrlHandler(SERVICE_NAME, ServiceCtrlHandler);
 
     ServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
-	ServiceStatus.dwControlsAccepted = 0;
-	ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
-	ServiceStatus.dwWin32ExitCode = 0;
-	ServiceStatus.dwServiceSpecificExitCode = 0;
-	ServiceStatus.dwCheckPoint = 0;
+    ServiceStatus.dwControlsAccepted = 0;
+    ServiceStatus.dwCurrentState = SERVICE_START_PENDING;
+    ServiceStatus.dwWin32ExitCode = 0;
+    ServiceStatus.dwServiceSpecificExitCode = 0;
+    ServiceStatus.dwCheckPoint = 0;
 
-	SetServiceStatus(hStatus, &ServiceStatus);
+    SetServiceStatus(hStatus, &ServiceStatus);
 
-	g_ServiceStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-	if (g_ServiceStopEvent == NULL)
-	{
-		ServiceStatus.dwControlsAccepted = 0;
-		ServiceStatus.dwCurrentState = SERVICE_STOPPED;
-		ServiceStatus.dwWin32ExitCode = GetLastError();
-		ServiceStatus.dwCheckPoint = 1;
-		SetServiceStatus(hStatus, &ServiceStatus);
-		return;
-	}
-
-
-	///×¼±¸¹¤×÷½áÊø
-	ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;///ÔÊĞíÊÖ¶¯Í£Ö¹·şÎñ
-	ServiceStatus.dwCurrentState = SERVICE_RUNNING;
-	ServiceStatus.dwWin32ExitCode = 0;
-	ServiceStatus.dwCheckPoint = 0;
-	SetServiceStatus(hStatus, &ServiceStatus);
+    g_ServiceStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    if (g_ServiceStopEvent == NULL)
+    {
+        ServiceStatus.dwControlsAccepted = 0;
+        ServiceStatus.dwCurrentState = SERVICE_STOPPED;
+        ServiceStatus.dwWin32ExitCode = GetLastError();
+        ServiceStatus.dwCheckPoint = 1;
+        SetServiceStatus(hStatus, &ServiceStatus);
+        return;
+    }
 
 
+    ///å‡†å¤‡å·¥ä½œç»“æŸ
+    ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP;///å…è®¸æ‰‹åŠ¨åœæ­¢æœåŠ¡
+    ServiceStatus.dwCurrentState = SERVICE_RUNNING;
+    ServiceStatus.dwWin32ExitCode = 0;
+    ServiceStatus.dwCheckPoint = 0;
+    SetServiceStatus(hStatus, &ServiceStatus);
 
 
 
-	/// ½¨Á¢Ïß³Ì
-	HANDLE hThread = CreateThread(NULL, 0, write, NULL, 0, NULL);
-	///µÈ´ıÏß³Ì½áÊø
-	WaitForSingleObject(hThread, INFINITE);
 
-	/// ¹Ø±Õ·şÎñ
-	CloseHandle(g_ServiceStopEvent);
-	ServiceStatus.dwControlsAccepted = 0;
-	ServiceStatus.dwCurrentState = SERVICE_STOPPED;
-	ServiceStatus.dwWin32ExitCode = 0;
-	ServiceStatus.dwCheckPoint = 3;
-	SetServiceStatus(hStatus, &ServiceStatus);
+
+    ///å»ºç«‹çº¿ç¨‹
+    HANDLE hThread = CreateThread(NULL, 0, write, NULL, 0, NULL);
+    ///ç­‰å¾…çº¿ç¨‹ç»“æŸ
+    WaitForSingleObject(hThread, INFINITE);
+
+    ///å…³é—­æœåŠ¡
+    CloseHandle(g_ServiceStopEvent);
+    ServiceStatus.dwControlsAccepted = 0;
+    ServiceStatus.dwCurrentState = SERVICE_STOPPED;
+    ServiceStatus.dwWin32ExitCode = 0;
+    ServiceStatus.dwCheckPoint = 3;
+    SetServiceStatus(hStatus, &ServiceStatus);
     return ;
 
 
@@ -79,39 +81,41 @@ void ServiceMain(int argc, char** argv){
 
 void ServiceCtrlHandler(int CtrlCode)
 {
-	switch (CtrlCode)
-	{
-	case SERVICE_CONTROL_STOP:
-	{
-		if (ServiceStatus.dwCurrentState != SERVICE_RUNNING)
-			break;
+    switch (CtrlCode)
+    {
+        case SERVICE_CONTROL_STOP:
+        {
+            if (ServiceStatus.dwCurrentState != SERVICE_RUNNING)
+                break;
 
-		ServiceStatus.dwControlsAccepted = 0;
-		ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
-		ServiceStatus.dwWin32ExitCode = 0;
-		ServiceStatus.dwCheckPoint = 4;
-		SetServiceStatus(hStatus, &ServiceStatus);
+            ServiceStatus.dwControlsAccepted = 0;
+            ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
+            ServiceStatus.dwWin32ExitCode = 0;
+            ServiceStatus.dwCheckPoint = 4;
+            SetServiceStatus(hStatus, &ServiceStatus);
 
 
-		SetEvent(g_ServiceStopEvent);
+            SetEvent(g_ServiceStopEvent);
 
-		break;
-	}
+            break;
+        }
 
-	default:
-	{
-		break;
-	}
-	}
+        default:
+        {
+            break;
+        }
+    }
 
 }
 int write(){
-    WriteToLog("·şÎñ¿ªÊ¼ÔËĞĞ");
+    WriteToLog("æœåŠ¡å¼€å§‹è¿è¡Œ");
     while(WaitForSingleObject(g_ServiceStopEvent, 0) != WAIT_OBJECT_0){
         WriteToLog("a");
-       Sleep(1000);
+        Sleep(1000);
     }
-    WriteToLog("·şÎñÍ£Ö¹ÔËĞĞ");
+    WriteToLog("æœåŠ¡åœæ­¢è¿è¡Œ");
     return 0;
 
 }
+
+#endif
