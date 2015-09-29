@@ -10,7 +10,7 @@
 #define LogWriter_h
 
 #include <stdio.h>
-#include<time.h>
+#include <time.h>
 
 #ifdef _WIN32
 #define PATH "c:\\pear.txt"
@@ -18,7 +18,7 @@
 #define PATH "pear.txt"
 #endif
 
-int WriteToLog(char* str);
-void WriteOpen();
-void WriteClose();
+int Write_To_Log(char* str);
+void Write_Open();
+void Write_Close();
 #endif /* LogWriter_h */

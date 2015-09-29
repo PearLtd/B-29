@@ -10,12 +10,12 @@
 #define LDaemon_h
 
 #include <stdio.h>
-#include<unistd.h>
-#include<stdlib.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #include "LogWriter.h"
 
-void LStart();
+void Linux_Start();
 void init_daemon();
 int towrite();
 #endif /* LDaemon_h */

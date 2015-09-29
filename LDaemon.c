@@ -7,11 +7,9 @@
 //
 
 #include "LDaemon.h"
+#ifndef _WIN32
 
-
-
-
-void LStart()
+void Linux_Start()
 {
     init_daemon();
     towrite();
@@ -37,11 +35,12 @@ void init_daemon()
 }
 
 int towrite(){
-    WriteToLog("守护进程开始运行");
+    Write_To_Log("start Daemon");
     while(1){
-        WriteToLog("a");
+        Write_To_Log("a");
         sleep(60);
     }
     return 0;
 
 }
+#endif // _WIN32

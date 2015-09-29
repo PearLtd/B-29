@@ -18,7 +18,7 @@
 void  ServiceMain(int argc, char** argv);
 void ServiceCtrlHandler(int CtrlCode);
 int write();
-void WStart();
+void Win_Start();
 
 
 #endif /* WService_h */

@@ -39,6 +39,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="LogWriter.h" />
+		<Unit filename="WInstallService.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="WInstallService.h" />
 		<Unit filename="WService.c">
 			<Option compilerVar="CC" />
 		</Unit>

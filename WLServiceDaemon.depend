@@ -1,21 +1,40 @@
 # depslib dependency file v1.0
-1443075378 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.c
+1443512945 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.c
 	"LogWriter.h"
 
-1443086553 c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.h
+1443512932 c:\c\wlservicedaemon\b-29\wlservicedaemon\logwriter.h
 	<stdio.h>
 	<time.h>
 
-1443065479 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\main.c
+1443512976 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\main.c
 	<stdio.h>
 	<stdlib.h>
 	"WService.h"
+	"WInstallService.h"
+	"LDaemon.h"
 
-1443075025 c:\c\wlservicedaemon\b-29\wlservicedaemon\wservice.h
+1443512716 c:\c\wlservicedaemon\b-29\wlservicedaemon\wservice.h
 	<Windows.h>
 	<stdio.h>
 	"LogWriter.h"
 
-1443075017 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\wservice.c
+1443513090 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\wservice.c
 	"WService.h"
+
+1443512980 c:\c\wlservicedaemon\b-29\wlservicedaemon\ldaemon.h
+	<stdio.h>
+	<unistd.h>
+	<stdlib.h>
+	"LogWriter.h"
+
+1443513024 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\ldaemon.c
+	"LDaemon.h"
+
+1443507449 c:\c\wlservicedaemon\b-29\wlservicedaemon\winstallservice.h
+	<stdio.h>
+	<unistd.h>
+	<windows.h>
+
+1443512084 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\winstallservice.c
+	"WInstallService.h"
 
