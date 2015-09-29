@@ -107,7 +107,7 @@ int write(){
     Write_To_Log("start service");
     int i=0;
     while(WaitForSingleObject(g_ServiceStopEvent, 0) != WAIT_OBJECT_0){
-            if(i==60){
+            if(i==59){
                 Write_To_Log("a");
                 i=0;
             }else{
