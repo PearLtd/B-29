@@ -7,7 +7,7 @@
 //
 
 #include "WInstallService.h"
-//#ifdef _WIN32
+#ifdef _WIN32
 char CurrentExePath[FILENAME_MAX];
 
 int Install_Service(int argc, const char * argv[])
@@ -83,4 +83,4 @@ void GetCurrentExePath(char *CurrentExePath, size_t length)
 {
     GetModuleFileName(NULL, CurrentExePath, length);
 }
-//#endif
+#endif
