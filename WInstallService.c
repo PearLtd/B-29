@@ -7,95 +7,80 @@
 //
 
 #include "WInstallService.h"
-#ifdef _WIN32
-int Install_Service()
-{
-    char Server_Path[100]="c:\\pear.exe";
-    char Bat_Path[100]={0};
-    char App_Path[100]={0};
-	GetModuleFileName(NULL, App_Path, 100);
-	strcpy(App_Path,App_Path);
+//#ifdef _WIN32
+char CurrentExePath[FILENAME_MAX];
 
-	int i;
-	for(i=0 ;i<100;i++){
-        if(Server_Path[i]!=App_Path[i] && Server_Path[i]-App_Path[i]!=32){
+int Install_Service(int argc, const char * argv[])
+{
+    char ServerExePath[]="c:\\Pear.exe";
+
+    GetCurrentExePath(CurrentExePath, FILENAME_MAX);
+
+    //the file on serverpath, already is server. return 1
+    if(GetExeOnServerPath(CurrentExePath,ServerExePath)==1)
+        return 1;
+
+
+    //from arg judge first run, or try to get admin's file.
+    //通过判断arg，判断是直接运行的程序，还是已经尝试提权的程序
+
+    //
+    if (argc > 1 && strcmp(argv[1], "Pear") == 0){
+        //
+        system("echo off");
+        system("sc stop Pear");
+        system("cls");
+        system("echo --- Logger Service Installe\r ---");
+        system("ping -n 5 127.0.0.1>nul");
+
+        //copy file to ServerExePath
+        char temp[FILENAME_MAX];
+        sprintf(temp,"copy /y %s %s",CurrentExePath , ServerExePath);
+        system(temp);
+
+        system("sc delete Pear");
+
+        system("cls");
+        system("echo --- Logger Service Installe\r ---");
+
+
+        //create service
+        sprintf(temp,"sc create Pear binPath= \"%s\" start= auto" , ServerExePath);
+        system(temp);
+
+        //start service
+        system("sc start Pear");
+
+        system("pause");
+
+        return 0;
+    }
+    RunSelfAsAdmin();
+    return 0;
+}
+
+void RunSelfAsAdmin()
+{
+    GetCurrentExePath(CurrentExePath, FILENAME_MAX);
+    if (ShellExecute(0, "runas", CurrentExePath, "Pear", "C:\\Windows\\System32", SW_NORMAL))
+        exit(0);
+}
+
+int GetExeOnServerPath(char *CurrentExePath, char *ServerExePath){
+    int i;
+    for(i=0 ;i<(sizeof(ServerExePath)-1);i++){
+        if(CurrentExePath[i]!=ServerExePath[i] && CurrentExePath[i]-ServerExePath[i]!=32){
             break;
         }
     }
-    if(i==100){
+    if(i==sizeof(ServerExePath)-1){
         return 1;
     }
 
-	strcpy(Bat_Path,App_Path);
-	(strrchr(Bat_Path, '\\'))[0] = 0;
-    strcat(Bat_Path , "\\temp.bat");
-
-    FILE* file;
-    file = fopen(Bat_Path, "w");
-    if (file == NULL) return -1;
-    fprintf(file,"echo off\n");
-    fprintf(file,"cls\n");
-    fprintf(file,":-------------------------------------\n");
-    fprintf(file,"REM  --> Check for permissions\n");
-    fprintf(file,">nul 2>&1 \"%%SYSTEMROOT%%\\system32\\cacls.exe\" \"%%SYSTEMROOT%%\\system32\\config\\system\"\n");
-    fprintf(file,"REM --> If error flag set, we do not have admin.\n");
-    fprintf(file,"if '%%errorlevel%%' NEQ '0' (\n");
-    fprintf(file,"    echo Requesting administrative privileges...\n");
-    fprintf(file,"    goto FIRST\n");
-    fprintf(file,") else ( goto gotAdmin )\n");
-    fprintf(file,":FIRST\n");
-    fprintf(file,"if '%%1%%' EQU 'first' (\n");
-    fprintf(file,"    goto UACPrompt\n");
-    fprintf(file,") else (\n");
-    fprintf(file,"     goto gotAdmin\n");
-    fprintf(file,")\n");
-    fprintf(file,":UACPrompt\n");
-    fprintf(file,"    echo Set UAC = CreateObject^(\"Shell.Application\"^) > \"%%temp%%\\getadmin.vbs\"\n");
-    fprintf(file,"    set params = %%*:\"=\"\"\n");
-    fprintf(file,"echo UAC.ShellExecute \"cmd.exe\", \"/c %%~s0 %%params%%\", \"\", \"runas\", 1 >> \"%%temp%%\\getadmin.vbs\"\n");
-    fprintf(file,"    \"%%temp%%\\getadmin.vbs\"\n");
-    fprintf(file,"    del \"%%temp%%\\getadmin.vbs\"\n");
-    fprintf(file,"    exit /B\n");
-    fprintf(file,":gotAdmin\n");
-    fprintf(file,"    pushd \"%%CD%%\"\n");
-    fprintf(file,"    CD /D \"%%~dp0\"\n");
-    fprintf(file,":--------------------------------------\n");
-
-    ///install service
-    fprintf(file,"sc stop pear\n");
-    fprintf(file,"cls\n");
-    fprintf(file,"echo --- Logger Service Installe\r ---\n");
-    fprintf(file,"echo 5\n");
-    fprintf(file,"ping -n 2 127.0.0.1>nul\n");
-    fprintf(file,"echo 4\n");
-    fprintf(file,"ping -n 2 127.0.0.1>nul\n");
-    fprintf(file,"echo 3\n");
-    fprintf(file,"ping -n 2 127.0.0.1>nul\n");
-    fprintf(file,"echo 2\n");
-    fprintf(file,"ping -n 2 127.0.0.1>nul\n");
-    fprintf(file,"echo 1\n");
-    fprintf(file,"ping -n 2 127.0.0.1>nul\n");
-    fprintf(file,"copy /y ");
-    fprintf(file,App_Path);
-    fprintf(file," ");
-    fprintf(file,Server_Path);
-    fprintf(file,"\n");
-    fprintf(file,"sc delete pear\n");
-    fprintf(file,"cls\n");
-    fprintf(file,"echo --- Logger Service Installe\r ---\n");
-    fprintf(file,"sc create pear binPath= \"");
-    fprintf(file,Server_Path);
-    fprintf(file,"\" start= auto\n");
-
-    ///start service
-    fprintf(file,"sc start pear\n");
-    fprintf(file,"pause\n");
-
-    ///delete bat file
-    fprintf(file,"del ");
-    fprintf(file,Bat_Path);
-    fclose(file);
-    system(strcat(Bat_Path," first"));
-    return 0;
 }
-#endif
+
+void GetCurrentExePath(char *CurrentExePath, size_t length)
+{
+    GetModuleFileName(NULL, CurrentExePath, length);
+}
+//#endif

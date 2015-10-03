@@ -6,7 +6,7 @@
 	<stdio.h>
 	<time.h>
 
-1443512976 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\main.c
+1443910951 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\main.c
 	<stdio.h>
 	<stdlib.h>
 	"WService.h"
@@ -18,7 +18,7 @@
 	<stdio.h>
 	"LogWriter.h"
 
-1443513090 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\wservice.c
+1443513604 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\wservice.c
 	"WService.h"
 
 1443512980 c:\c\wlservicedaemon\b-29\wlservicedaemon\ldaemon.h
@@ -30,11 +30,12 @@
 1443513024 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\ldaemon.c
 	"LDaemon.h"
 
-1443507449 c:\c\wlservicedaemon\b-29\wlservicedaemon\winstallservice.h
+1443914606 c:\c\wlservicedaemon\b-29\wlservicedaemon\winstallservice.h
 	<stdio.h>
-	<unistd.h>
+	<string.h>
 	<windows.h>
+	<tchar.h>
 
-1443512084 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\winstallservice.c
+1443914529 source:c:\c\wlservicedaemon\b-29\wlservicedaemon\winstallservice.c
 	"WInstallService.h"
 

@@ -20,7 +20,7 @@
 
 int main(int argc, const char * argv[]) {
 #ifdef _WIN32
-    if(Install_Service()==1){
+    if(Install_Service(argc,argv)==1){
         Win_Start();
     }
 #else
